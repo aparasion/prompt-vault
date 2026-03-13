@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Productivity Prompts – Prompt Vault</title>
+  <title>Social Prompts – Prompt Vault</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-S..." crossorigin="anonymous" referrerpolicy="no-referrer" />
   <script>tailwind.config={darkMode:'class',theme:{extend:{colors:{primary:'#6366f1',primarydark:'#4f46e5'}}}}</script>
@@ -30,7 +30,7 @@
   <script src="prompts-data.js"></script>
   <script>
     const container = document.getElementById('promptList');
-    const filteredPrompts = allPrompts.filter(p => p.category === "Productivity");
+    const filteredPrompts = allPrompts.filter(p => p.category === "Social");
 
     filteredPrompts.forEach(p => {
       const card = document.createElement('div');
