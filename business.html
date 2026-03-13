@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Business Prompts – Prompt Vault</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-S..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script>tailwind.config={darkMode:'class',theme:{extend:{colors:{primary:'#6366f1',primarydark:'#4f46e5'}}}}</script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen transition-colors">
+
+  <header class="bg-white dark:bg-gray-800 shadow sticky top-0 z-10">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+      <h1 class="text-3xl font-bold text-primary"><a href="index.html">Prompt Vault</a> → Coding</h1>
+      <button id="toggleDark" class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600">
+        <i class="fas fa-moon text-xl"></i>
+      </button>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 py-8">
+    <div id="promptList" class="grid gap-6 md:grid-cols-2 lg:grid-cols-3"></div>
+  </main>
+
+  <footer class="bg-white dark:bg-gray-800 border-t mt-auto py-6 text-center text-sm text-gray-500 dark:text-gray-400">
+    <a href="index.html" class="text-primary hover:underline">← Back to All Prompts</a> • Contribute via GitHub
+  </footer>
+
+  <script src="prompts-data.js"></script>
+  <script>
+    const container = document.getElementById('promptList');
+    const filteredPrompts = allPrompts.filter(p => p.category === "Business");
+
+    filteredPrompts.forEach(p => {
+      const card = document.createElement('div');
+      card.className = 'bg-white dark:bg-gray-800 rounded-xl shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-lg transition';
+      card.innerHTML = `
+        <div class="bg-gradient-to-r from-primary to-primarydark px-5 py-3 text-white font-medium">
+          ${p.title}
+        </div>
+        <div class="p-5">
+          <p class="text-gray-700 dark:text-gray-300 mb-4 whitespace-pre-wrap text-sm leading-relaxed">${p.text.replace(/\n/g, '<br>')}</p>
+          <button class="copy-btn w-full py-2.5 bg-primary hover:bg-primarydark text-white rounded-lg transition flex items-center justify-center gap-2" data-text="${p.text.replace(/"/g,'&quot;')}">
+            <i class="fas fa-copy"></i> Copy Prompt
+          </button>
+        </div>
+      `;
+      container.appendChild(card);
+    });
+
+    container.addEventListener('click', e => {
+      const btn = e.target.closest('.copy-btn');
+      if (btn) {
+        navigator.clipboard.writeText(btn.dataset.text).then(() => {
+          const original = btn.innerHTML;
+          btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+          btn.classList.add('bg-green-600', 'hover:bg-green-700');
+          setTimeout(() => {
+            btn.innerHTML = original;
+            btn.classList.remove('bg-green-600', 'hover:bg-green-700');
+          }, 1800);
+        }).catch(() => {
+          alert("Copy failed – please select and copy manually");
+        });
+      }
+    });
+
+    // Dark mode
+    const toggle = document.getElementById('toggleDark');
+    const html = document.documentElement;
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      html.classList.add('dark');
+      toggle.innerHTML = '<i class="fas fa-sun text-xl"></i>';
+    }
+    toggle.addEventListener('click', () => {
+      html.classList.toggle('dark');
+      localStorage.theme = html.classList.contains('dark') ? 'dark' : 'light';
+      toggle.innerHTML = html.classList.contains('dark') ? '<i class="fas fa-sun text-xl"></i>' : '<i class="fas fa-moon text-xl"></i>';
+    });
+  </script>
+</body>
+</html>
