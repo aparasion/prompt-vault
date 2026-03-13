@@ -3,120 +3,100 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Prompt Vault – Free AI Prompts for Grok, ChatGPT, Claude & Midjourney</title>
-  <meta name="description" content="Searchable collection of high-quality AI prompts. Copy-paste ready for writing, coding, art, business and more. 100% free & static.">
-  
-  <!-- Tailwind v4 Play CDN (for development/prototyping – fast & no build needed) -->
+  <title>Prompt Vault – 100+ Free AI Prompts 2026</title>
+  <meta name="description" content="Searchable free prompts for ChatGPT, Claude, Grok, Midjourney. Categorized & copy-paste ready.">
   <script src="https://cdn.tailwindcss.com"></script>
-  
-  <!-- Optional: better copy icon & clipboard support -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-x..." crossorigin="anonymous" referrerpolicy="no-referrer" />
-  
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            primary: '#6366f1',      // indigo-500
-            primarydark: '#4f46e5',  // indigo-600
-          }
-        }
-      }
-    }
-  </script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-S..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script>tailwind.config={darkMode:'class',theme:{extend:{colors:{primary:'#6366f1',primarydark:'#4f46e5'}}}}</script>
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen transition-colors duration-300">
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen transition-colors">
 
-  <!-- Header -->
   <header class="bg-white dark:bg-gray-800 shadow sticky top-0 z-10">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
-      <h1 class="text-2xl sm:text-3xl font-bold text-primary">Prompt Vault</h1>
-      
+    <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+      <h1 class="text-3xl font-bold text-primary">Prompt Vault</h1>
       <div class="flex items-center gap-4">
-        <input id="search" type="text" placeholder="Search prompts..." class="w-64 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary">
-        
-        <button id="toggleDark" class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition">
+        <input id="search" placeholder="Search prompts..." class="w-64 px-4 py-2 rounded-lg border dark:border-gray-600 bg-white dark:bg-gray-700 focus:ring-2 focus:ring-primary">
+        <button id="randomBtn" class="px-4 py-2 bg-primary hover:bg-primarydark text-white rounded-lg flex items-center gap-2">
+          <i class="fas fa-shuffle"></i> Random Prompt
+        </button>
+        <button id="toggleDark" class="p-2 rounded-lg bg-gray-200 dark:bg-gray-700">
           <i class="fas fa-moon text-xl"></i>
         </button>
       </div>
     </div>
   </header>
 
-  <!-- Main content -->
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div id="noResults" class="hidden text-center py-12 text-gray-500 dark:text-gray-400">
-      No prompts found matching your search.
-    </div>
-    
+  <main class="max-w-7xl mx-auto px-4 py-8">
+    <!-- Category chips -->
+    <div id="categoryChips" class="flex flex-wrap gap-2 mb-8"></div>
+
+    <div id="noResults" class="hidden text-center py-12 text-gray-500 dark:text-gray-400">No prompts found.</div>
     <div id="promptList" class="grid gap-6 md:grid-cols-2 lg:grid-cols-3"></div>
   </main>
 
-  <!-- Footer -->
-  <footer class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 mt-auto">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center text-sm text-gray-500 dark:text-gray-400">
-      Built with ❤️ as a free static site • 
-      <a href="https://github.com/YOUR_USERNAME/ai-prompt-vault" class="text-primary hover:underline">GitHub</a> • 
-      Add your best prompts via PR!
+  <div id="randomModal" class="fixed inset-0 bg-black bg-opacity-60 hidden flex items-center justify-center z-50">
+    <div class="bg-white dark:bg-gray-800 rounded-xl max-w-2xl w-11/12 mx-4 p-6 relative">
+      <button id="closeModal" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:text-gray-400">
+        <i class="fas fa-times text-2xl"></i>
+      </button>
+      <h2 class="text-2xl font-bold mb-4 text-primary">Random Prompt</h2>
+      <div id="modalCategory" class="text-sm text-gray-500 dark:text-gray-400 mb-2"></div>
+      <div id="modalTitle" class="text-xl font-semibold mb-3"></div>
+      <pre id="modalText" class="whitespace-pre-wrap bg-gray-100 dark:bg-gray-700 p-4 rounded-lg text-sm overflow-auto max-h-80"></pre>
+      <button id="copyModal" class="mt-4 px-6 py-3 bg-primary hover:bg-primarydark text-white rounded-lg w-full flex items-center justify-center gap-2">
+        <i class="fas fa-copy"></i> Copy to Clipboard
+      </button>
     </div>
+  </div>
+
+  <footer class="bg-white dark:bg-gray-800 border-t mt-auto py-6 text-center text-sm text-gray-500 dark:text-gray-400">
+    <a href="https://github.com/YOUR_USERNAME/ai-prompt-vault" class="text-primary hover:underline">GitHub</a> • Contribute prompts!
   </footer>
 
-  <!-- Prompts data (expand this array as much as you want) -->
+  <script src="prompts-data.js"></script>
   <script>
-    const prompts = [
-      {
-        category: "Writing",
-        title: "Blog Post – Engaging Intro",
-        text: "Write a 150-word blog post introduction that hooks the reader immediately. Topic: [TOPIC]. Use storytelling, a surprising fact, or a provocative question. Tone: conversational and energetic. End with a clear promise of what the reader will learn."
-      },
-      {
-        category: "Coding",
-        title: "Refactor messy function",
-        text: "Refactor the following JavaScript function to be cleaner, more readable, and follow modern best practices (ES6+, single responsibility, better naming). Add comments explaining changes. Original:\n\n[PASTE CODE HERE]"
-      },
-      {
-        category: "Art – Midjourney",
-        title: "Cinematic sci-fi scene",
-        text: "Cinematic wide shot of a neon-drenched cyberpunk city at rainy night, towering holographic billboards, flying cars, lone figure in trench coat looking up, dramatic lighting, volumetric fog, ultra detailed, 8k, --ar 16:9 --v 6 --stylize 750 --q 2"
-      },
-      {
-        category: "Business",
-        title: "Cold email opener",
-        text: "Write a concise, non-spammy cold email subject line + first 3 sentences to [ROLE] at [COMPANY]. Goal: book a 10-min call about [VALUE PROP]. Tone: curious, respectful, value-first. Personalize with recent company news if possible."
-      },
-      {
-        category: "Productivity",
-        title: "Daily planning prompt",
-        text: "Act as my productivity coach. Today is [DATE]. My top 3 goals are: 1. [GOAL1] 2. [GOAL2] 3. [GOAL3]. Suggest the ideal schedule blocks (using time-blocking), Pomodoro sessions if needed, and one micro-habit to build momentum. Keep me accountable with a short evening reflection question."
-      }
-      // ← Add 50–500+ more objects here (copy-paste friendly)
-    ];
-
-    // ────────────────────────────────────────────────
-    // Render prompts
     const promptContainer = document.getElementById('promptList');
     const noResults = document.getElementById('noResults');
     const searchInput = document.getElementById('search');
+    const chipsContainer = document.getElementById('categoryChips');
+    const randomBtn = document.getElementById('randomBtn');
+    const modal = document.getElementById('randomModal');
+    const closeModal = document.getElementById('closeModal');
+    const copyModal = document.getElementById('copyModal');
 
-    function renderPrompts(filtered = prompts) {
+    let currentFilter = null; // null = all, string = category
+
+    function renderChips() {
+      chipsContainer.innerHTML = '<button data-cat="all" class="chip px-4 py-2 rounded-full bg-primary text-white font-medium">All</button>';
+      categories.forEach(cat => {
+        const btn = document.createElement('button');
+        btn.className = 'chip px-4 py-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition';
+        btn.textContent = cat;
+        btn.dataset.cat = cat;
+        chipsContainer.appendChild(btn);
+      });
+    }
+
+    function renderPrompts(promptsToShow) {
       promptContainer.innerHTML = '';
-      if (filtered.length === 0) {
+      if (promptsToShow.length === 0) {
         noResults.classList.remove('hidden');
         return;
       }
       noResults.classList.add('hidden');
 
-      filtered.forEach(p => {
+      promptsToShow.forEach(p => {
         const card = document.createElement('div');
-        card.className = 'bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden border border-gray-200 dark:border-gray-700 hover:shadow-lg transition';
+        card.className = 'bg-white dark:bg-gray-800 rounded-xl shadow border dark:border-gray-700 hover:shadow-lg transition overflow-hidden';
         card.innerHTML = `
-          <div class="bg-gradient-to-r from-primary to-primarydark px-5 py-3 text-white font-medium">
-            ${p.category} • ${p.title}
+          <div class="bg-gradient-to-r from-primary to-indigo-700 px-5 py-3 text-white font-medium flex justify-between items-center">
+            <span>${p.category} • ${p.title}</span>
+            <a href="${p.category.toLowerCase()}.html" class="text-xs underline hover:no-underline">More ${p.category}</a>
           </div>
           <div class="p-5">
             <p class="text-gray-700 dark:text-gray-300 mb-4 whitespace-pre-wrap">${p.text.replace(/\n/g, '<br>')}</p>
-            <button class="copy-btn flex items-center gap-2 px-4 py-2 bg-primary hover:bg-primarydark text-white rounded-lg transition w-full justify-center" data-text="${p.text.replace(/"/g, '&quot;')}">
-              <i class="fas fa-copy"></i> Copy Prompt
+            <button class="copy-btn w-full py-2 bg-primary hover:bg-indigo-700 text-white rounded-lg flex items-center justify-center gap-2 transition" data-text="${p.text.replace(/"/g,'&quot;')}">
+              <i class="fas fa-copy"></i> Copy
             </button>
           </div>
         `;
@@ -124,56 +104,88 @@
       });
     }
 
-    // Initial render
-    renderPrompts();
+    function filterAndRender() {
+      let filtered = allPrompts;
+      const term = searchInput.value.toLowerCase().trim();
 
-    // Search
-    searchInput.addEventListener('input', (e) => {
-      const term = e.target.value.toLowerCase().trim();
-      const filtered = prompts.filter(p =>
-        p.title.toLowerCase().includes(term) ||
-        p.category.toLowerCase().includes(term) ||
-        p.text.toLowerCase().includes(term)
-      );
+      if (currentFilter && currentFilter !== 'all') {
+        filtered = filtered.filter(p => p.category === currentFilter);
+      }
+      if (term) {
+        filtered = filtered.filter(p =>
+          p.title.toLowerCase().includes(term) ||
+          p.category.toLowerCase().includes(term) ||
+          p.text.toLowerCase().includes(term)
+        );
+      }
       renderPrompts(filtered);
+    }
+
+    // Events
+    chipsContainer.addEventListener('click', e => {
+      if (e.target.dataset.cat) {
+        currentFilter = e.target.dataset.cat;
+        document.querySelectorAll('.chip').forEach(c => c.classList.remove('bg-primary','text-white'));
+        e.target.classList.add('bg-primary','text-white');
+        filterAndRender();
+      }
     });
 
-    // Copy functionality
-    promptContainer.addEventListener('click', (e) => {
-      if (e.target.closest('.copy-btn')) {
-        const btn = e.target.closest('.copy-btn');
-        const text = btn.dataset.text;
-        navigator.clipboard.writeText(text).then(() => {
+    searchInput.addEventListener('input', filterAndRender);
+
+    // Copy
+    promptContainer.addEventListener('click', e => {
+      const btn = e.target.closest('.copy-btn');
+      if (btn) {
+        navigator.clipboard.writeText(btn.dataset.text).then(() => {
           const orig = btn.innerHTML;
           btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
-          btn.classList.add('bg-green-600', 'hover:bg-green-700');
-          setTimeout(() => {
-            btn.innerHTML = orig;
-            btn.classList.remove('bg-green-600', 'hover:bg-green-700');
-          }, 2000);
+          setTimeout(() => btn.innerHTML = orig, 1800);
         });
       }
     });
 
-    // Dark mode toggle
-    const toggleBtn = document.getElementById('toggleDark');
-    const html = document.documentElement;
-
-    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-      html.classList.add('dark');
-      toggleBtn.innerHTML = '<i class="fas fa-sun text-xl"></i>';
-    }
-
-    toggleBtn.addEventListener('click', () => {
-      html.classList.toggle('dark');
-      if (html.classList.contains('dark')) {
-        localStorage.theme = 'dark';
-        toggleBtn.innerHTML = '<i class="fas fa-sun text-xl"></i>';
-      } else {
-        localStorage.theme = 'light';
-        toggleBtn.innerHTML = '<i class="fas fa-moon text-xl"></i>';
+    // Random
+    randomBtn.addEventListener('click', () => {
+      let pool = allPrompts;
+      if (currentFilter && currentFilter !== 'all') {
+        pool = allPrompts.filter(p => p.category === currentFilter);
       }
+      if (pool.length === 0) return;
+      const rand = pool[Math.floor(Math.random() * pool.length)];
+
+      document.getElementById('modalCategory').textContent = rand.category;
+      document.getElementById('modalTitle').textContent = rand.title;
+      document.getElementById('modalText').textContent = rand.text;
+      modal.classList.remove('hidden');
     });
+
+    closeModal.addEventListener('click', () => modal.classList.add('hidden'));
+    modal.addEventListener('click', e => { if (e.target === modal) modal.classList.add('hidden'); });
+
+    copyModal.addEventListener('click', () => {
+      const text = document.getElementById('modalText').textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        copyModal.innerHTML = '<i class="fas fa-check"></i> Copied!';
+        setTimeout(() => copyModal.innerHTML = '<i class="fas fa-copy"></i> Copy to Clipboard', 1800);
+      });
+    });
+
+    // Dark mode
+    const toggleDark = document.getElementById('toggleDark');
+    if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark');
+      toggleDark.innerHTML = '<i class="fas fa-sun text-xl"></i>';
+    }
+    toggleDark.addEventListener('click', () => {
+      document.documentElement.classList.toggle('dark');
+      localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+      toggleDark.innerHTML = document.documentElement.classList.contains('dark') ? '<i class="fas fa-sun text-xl"></i>' : '<i class="fas fa-moon text-xl"></i>';
+    });
+
+    // Init
+    renderChips();
+    renderPrompts(allPrompts);
   </script>
 </body>
 </html>
